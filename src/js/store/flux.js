@@ -16,6 +16,29 @@ const getState = ({ getStore, getActions, setStore }) => {
       ],
     },
     actions: {
+      registrar: (form) => {
+        
+        console.log("hola desde flux, estos son los datos", form);
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify(form);
+
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch(
+          "https://3000-mojonapower-jwtback-crwvbj6d0ay.ws-us38.gitpod.io/registro",
+          requestOptions
+        )
+          .then((response) => response.json())
+          .then((result) => alert("Registrado con éxito"+ result.email))
+          .catch((error) => console.log("error", error));
+      },
       enviarDatos: (e, mail, pass) => {
         e.preventDefault();
         console.log("mail", mail);
@@ -49,7 +72,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           .catch((error) => console.log("error", error));
       },
       check: () => {
-		
         let token = sessionStorage.getItem("token");
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${token}`);
@@ -66,11 +88,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         )
           .then((response) => response.json())
           .then((result) => {
-			if(result.usuario!=undefined){
-				setStore({ logged: true });
-				console.log(getStore())
-			}
-		  })
+            if (result.usuario != undefined) {
+              setStore({ logged: true });
+              console.log(getStore());
+            }
+          })
           .catch((error) => console.log("error!!!!", error));
       },
       // Use getActions to call a function within a fuction
